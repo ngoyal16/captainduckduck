@@ -128,7 +128,7 @@ class DataStore {
         return 'srv-' + this.getNameSpace() + '--' + appName;
     }
 
-    getImageName(authObj, appName, version) {
+    getImageName(authObj, dockerAuthImagePrefix, appName, version) {
 
         if (version === 0) {
             version = '0';
@@ -137,7 +137,7 @@ class DataStore {
         let authPrefix = '';
 
         if (authObj) {
-            authPrefix = authObj.serveraddress + '/' + authObj.username + '/';
+            authPrefix = authObj.serveraddress + '/' + (dockerAuthImagePrefix ? (dockerAuthImagePrefix + '/') : '');
         }
 
         return authPrefix + 'img-' + this.getNameSpace() + '--' + appName + (version ? (':' + version) : '');

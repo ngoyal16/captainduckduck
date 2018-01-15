@@ -181,10 +181,12 @@ class DockerRegistry {
 
     }
 
-    updateRegistryAuthHeader(username, password, domain, currentVersion) {
+    updateRegistryAuthHeader(username, password, domain, currentVersion, imagePrefix) {
 
         const self = this;
         const dockerApi = this.dockerApi;
+
+        imagePrefix = imagePrefix || '';
 
         let nextVersion = null;
 
@@ -203,7 +205,7 @@ class DockerRegistry {
                 userEmailAddress = emailAddress;
 
                 if (currentVersion) {
-                    return currentVersion
+                    return currentVersion;
                 }
 
                 return self.dataStore.getRegistryAuthSecretVersion();
@@ -225,7 +227,7 @@ class DockerRegistry {
 
                 if (secretExist) {
                     Logger.d('WARNING! Unexpected secret exist! Perhaps secret was created but Captain was not updated.');
-                    return self.updateRegistryAuthHeader(username, password, domain, nextVersion);
+                    return self.updateRegistryAuthHeader(username, password, domain, nextVersion, imagePrefix);
                 }
                 else {
                     return dockerApi
@@ -233,7 +235,8 @@ class DockerRegistry {
                             username: username,
                             password: password,
                             email: userEmailAddress || CaptainConstants.defaultEmail,
-                            serveraddress: domain
+                            serveraddress: domain,
+                            imagePrefix: imagePrefix
                         }))
                         .then(function () {
                             Logger.d('Updating EnvVars to update docker registry auth.');

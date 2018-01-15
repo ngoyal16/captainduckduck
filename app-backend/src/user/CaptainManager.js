@@ -36,6 +36,7 @@ class CaptainManager {
         this.waitUntilRestarted = false;
         this.captainSalt = '';
         this.dockerAuthObj = '';
+        this.dockerAuthImagePrefix = '';
         this.consecutiveHealthCheckFailCount = 0;
         this.healthCheckUuid = uuid();
     }
@@ -199,7 +200,13 @@ class CaptainManager {
                     throw new Error('Docker Auth content is empty!');
                 }
 
-                self.dockerAuthObj = JSON.parse(secretContent);
+                let secretObj = JSON.parse(secretContent);
+
+                if (secretObj) {
+                    self.dockerAuthImagePrefix = secretObj.imagePrefix;
+                    secretObj.imagePrefix = undefined;
+                }
+                self.dockerAuthObj = secretObj;
 
                 return true;
 
@@ -479,6 +486,10 @@ class CaptainManager {
 
     getDockerAuthObject() {
         return this.dockerAuthObj;
+    }
+
+    getDockerAuthImagePrefix() {
+        return (this.dockerAuthImagePrefix || '');
     }
 
     updateNetDataInfo(netDataInfo) {

@@ -149,7 +149,8 @@ class ServiceManager {
 
         const self = this;
 
-        let imageName = this.dataStore.getImageName(CaptainManager.get().getDockerAuthObject(), appName);
+        let imageName = this.dataStore.getImageName(CaptainManager.get().getDockerAuthObject(),
+            CaptainManager.get().getDockerAuthImagePrefix(), appName);
         let dockerApi = this.dockerApi;
         let dataStore = this.dataStore;
         let newVersion = null;
@@ -663,7 +664,8 @@ class ServiceManager {
 
         let serviceName = this.dataStore.getServiceName(appName);
         const dockerAuthObject = CaptainManager.get().getDockerAuthObject();
-        let imageName = this.dataStore.getImageName(dockerAuthObject, appName, version);
+        let imageName = this.dataStore.getImageName(dockerAuthObject, CaptainManager.get().getDockerAuthImagePrefix(),
+            appName, version);
         let dockerApi = this.dockerApi;
         let dataStore = this.dataStore;
         let app = null;

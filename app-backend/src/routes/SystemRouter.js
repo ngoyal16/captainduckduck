@@ -158,14 +158,16 @@ router.post('/enableregistry/', function (req, res, next) {
             let user = req.body.registryUser;
             let pass = req.body.registryPassword;
             let domain = req.body.registryDomain;
+            let imagePrefix = req.body.registryImagePrefix;
 
             if (isLocal) {
                 user = CaptainConstants.captainRegistryUsername;
                 pass = captainManager.getCaptainSalt();
                 domain = captainManager.getDockerRegistry().getLocalRegistryDomainAndPort();
+                imagePrefix = '';
             }
 
-            return captainManager.getDockerRegistry().updateRegistryAuthHeader(user, pass, domain);
+            return captainManager.getDockerRegistry().updateRegistryAuthHeader(user, pass, domain, null, imagePrefix);
 
         })
         .then(function () {
